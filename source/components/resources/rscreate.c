@@ -224,7 +224,7 @@ AcpiBufferToResource (
     }
     if (ACPI_FAILURE (Status))
     {
-        ACPI_FREE (Resource);
+        ACPI_FREE_SIZE (Resource, ListSizeNeeded);
     }
     else
     {

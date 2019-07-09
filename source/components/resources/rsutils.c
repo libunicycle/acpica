@@ -954,7 +954,7 @@ AcpiRsSetSrsMethodData (
          * Must free the buffer allocated above (otherwise it is freed
          * later)
          */
-        ACPI_FREE (Buffer.Pointer);
+        ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
         Status = AE_NO_MEMORY;
         goto Cleanup;
     }

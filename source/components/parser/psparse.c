@@ -646,7 +646,7 @@ AcpiPsParseAml (
                 (WalkState->MethodNestingDepth + 1) * 3, " ",
                 &WalkState->MethodPathname[1]));
 
-            ACPI_FREE (WalkState->MethodPathname);
+            ACPI_FREE_SIZE (WalkState->MethodPathname, WalkState->MethodPathnameLength);
             WalkState->MethodIsNested = FALSE;
         }
         if (Status == AE_CTRL_TRANSFER)

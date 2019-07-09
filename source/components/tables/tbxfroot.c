@@ -275,63 +275,10 @@ AcpiFindRootPointer (
 
     ACPI_FUNCTION_TRACE (AcpiFindRootPointer);
 
-
-    /* 1a) Get the location of the Extended BIOS Data Area (EBDA) */
-
-    TablePtr = AcpiOsMapMemory (
-        (ACPI_PHYSICAL_ADDRESS) ACPI_EBDA_PTR_LOCATION,
-        ACPI_EBDA_PTR_LENGTH);
-    if (!TablePtr)
-    {
-        ACPI_ERROR ((AE_INFO,
-            "Could not map memory at 0x%8.8X for length %u",
-            ACPI_EBDA_PTR_LOCATION, ACPI_EBDA_PTR_LENGTH));
-
-        return_ACPI_STATUS (AE_NO_MEMORY);
-    }
-
-    ACPI_MOVE_16_TO_32 (&PhysicalAddress, TablePtr);
-
-    /* Convert segment part to physical address */
-
-    PhysicalAddress <<= 4;
-    AcpiOsUnmapMemory (TablePtr, ACPI_EBDA_PTR_LENGTH);
-
-    /* EBDA present? */
-
-    if (PhysicalAddress > 0x400)
-    {
-        /*
-         * 1b) Search EBDA paragraphs (EBDA is required to be a
-         *     minimum of 1K length)
-         */
-        TablePtr = AcpiOsMapMemory (
-            (ACPI_PHYSICAL_ADDRESS) PhysicalAddress,
-            ACPI_EBDA_WINDOW_SIZE);
-        if (!TablePtr)
-        {
-            ACPI_ERROR ((AE_INFO,
-                "Could not map memory at 0x%8.8X for length %u",
-                PhysicalAddress, ACPI_EBDA_WINDOW_SIZE));
-
-            return_ACPI_STATUS (AE_NO_MEMORY);
-        }
-
-        MemRover = AcpiTbScanMemoryForRsdp (
-            TablePtr, ACPI_EBDA_WINDOW_SIZE);
-        AcpiOsUnmapMemory (TablePtr, ACPI_EBDA_WINDOW_SIZE);
-
-        if (MemRover)
-        {
-            /* Return the physical address */
-
-            PhysicalAddress +=
-                (UINT32) ACPI_PTR_DIFF (MemRover, TablePtr);
-
-            *TableAddress = (ACPI_PHYSICAL_ADDRESS) PhysicalAddress;
-            return_ACPI_STATUS (AE_OK);
-        }
-    }
+    /* Remove searching at EBDA, it is out of date mechanism.
+     * Another option would be implement AcpiOsMapMemory() hook to actually
+     * map the address space and mark it with ASAN as valid.
+     */
 
     /*
      * 2) Search upper memory: 16-byte boundaries in E0000h-FFFFFh

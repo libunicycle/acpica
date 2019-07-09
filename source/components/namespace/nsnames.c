@@ -182,7 +182,8 @@ AcpiNsNormalizePathname (
 
 char *
 AcpiNsGetExternalPathname (
-    ACPI_NAMESPACE_NODE     *Node)
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_SIZE               *NameBufferSize)
 {
     char                    *NameBuffer;
 
@@ -190,7 +191,7 @@ AcpiNsGetExternalPathname (
     ACPI_FUNCTION_TRACE_PTR (NsGetExternalPathname, Node);
 
 
-    NameBuffer = AcpiNsGetNormalizedPathname (Node, FALSE);
+    NameBuffer = AcpiNsGetNormalizedPathname (Node, FALSE, NameBufferSize);
     return_PTR (NameBuffer);
 }
 
@@ -480,10 +481,10 @@ BuildTrailingNull:
 char *
 AcpiNsGetNormalizedPathname (
     ACPI_NAMESPACE_NODE     *Node,
-    BOOLEAN                 NoTrailing)
+    BOOLEAN                 NoTrailing,
+    ACPI_SIZE               *Size)
 {
     char                    *NameBuffer;
-    ACPI_SIZE               Size;
 
 
     ACPI_FUNCTION_TRACE_PTR (NsGetNormalizedPathname, Node);
@@ -491,25 +492,25 @@ AcpiNsGetNormalizedPathname (
 
     /* Calculate required buffer size based on depth below root */
 
-    Size = AcpiNsBuildNormalizedPath (Node, NULL, 0, NoTrailing);
-    if (!Size)
+    *Size = AcpiNsBuildNormalizedPath (Node, NULL, 0, NoTrailing);
+    if (!*Size)
     {
         return_PTR (NULL);
     }
 
     /* Allocate a buffer to be returned to caller */
 
-    NameBuffer = ACPI_ALLOCATE_ZEROED (Size);
+    NameBuffer = ACPI_ALLOCATE_ZEROED (*Size);
     if (!NameBuffer)
     {
         ACPI_ERROR ((AE_INFO,
-            "Could not allocate %u bytes", (UINT32) Size));
+            "Could not allocate %u bytes", (UINT32) *Size));
         return_PTR (NULL);
     }
 
     /* Build the path in the allocated buffer */
 
-    (void) AcpiNsBuildNormalizedPath (Node, NameBuffer, Size, NoTrailing);
+    (void) AcpiNsBuildNormalizedPath (Node, NameBuffer, *Size, NoTrailing);
 
     ACPI_DEBUG_PRINT_RAW ((ACPI_DB_NAMES, "%s: Path \"%s\"\n",
         ACPI_GET_FUNCTION_NAME, NameBuffer));
@@ -542,6 +543,7 @@ AcpiNsBuildPrefixedPathname (
     char                    *FullPath = NULL;
     char                    *ExternalPath = NULL;
     char                    *PrefixPath = NULL;
+    ACPI_SIZE               PrefixPathSize = 0;
     UINT32                  PrefixPathLength = 0;
 
 
@@ -549,7 +551,7 @@ AcpiNsBuildPrefixedPathname (
 
     if (PrefixScope && PrefixScope->Scope.Node)
     {
-        PrefixPath = AcpiNsGetNormalizedPathname (PrefixScope->Scope.Node, TRUE);
+        PrefixPath = AcpiNsGetNormalizedPathname (PrefixScope->Scope.Node, TRUE, &PrefixPathSize);
         if (PrefixPath)
         {
             PrefixPathLength = strlen (PrefixPath);
@@ -591,7 +593,7 @@ AcpiNsBuildPrefixedPathname (
 Cleanup:
     if (PrefixPath)
     {
-        ACPI_FREE (PrefixPath);
+        ACPI_FREE_SIZE (PrefixPath, PrefixPathSize);
     }
     if (ExternalPath)
     {

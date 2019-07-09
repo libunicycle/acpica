@@ -858,6 +858,7 @@ AcpiNsDumpOneObjectPath (
 {
     UINT32                  MaxLevel = *((UINT32 *) Context);
     char                    *Pathname;
+    ACPI_SIZE               PathnameSize;
     ACPI_NAMESPACE_NODE     *Node;
     int                     PathIndent;
 
@@ -875,7 +876,7 @@ AcpiNsDumpOneObjectPath (
         return (AE_OK);
     }
 
-    Pathname = AcpiNsGetNormalizedPathname (Node, TRUE);
+    Pathname = AcpiNsGetNormalizedPathname (Node, TRUE, &PathnameSize);
 
     PathIndent = 1;
     if (Level <= MaxLevel)
@@ -888,7 +889,7 @@ AcpiNsDumpOneObjectPath (
         PathIndent, " ");
 
     AcpiOsPrintf ("%s\n", &Pathname[1]);
-    ACPI_FREE (Pathname);
+    ACPI_FREE_SIZE (Pathname, PathnameSize);
     return (AE_OK);
 }
 

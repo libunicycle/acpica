@@ -219,8 +219,9 @@ AcpiNsSearchOneScope (
     if (ACPI_LV_NAMES & AcpiDbgLevel)
     {
         char                *ScopeName;
+        ACPI_SIZE           ScopeNameSize;
 
-        ScopeName = AcpiNsGetNormalizedPathname (ParentNode, TRUE);
+        ScopeName = AcpiNsGetNormalizedPathname (ParentNode, TRUE, &ScopeNameSize);
         if (ScopeName)
         {
             ACPI_DEBUG_PRINT ((ACPI_DB_NAMES,
@@ -228,7 +229,7 @@ AcpiNsSearchOneScope (
                 ScopeName, ParentNode, ACPI_CAST_PTR (char, &TargetName),
                 AcpiUtGetTypeName (Type)));
 
-            ACPI_FREE (ScopeName);
+            ACPI_FREE_SIZE (ScopeName, ScopeNameSize);
         }
     }
 #endif

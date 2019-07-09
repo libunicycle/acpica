@@ -959,11 +959,11 @@ AcpiDmTestResourceConversion (
 
     /* Cleanup and exit */
 
-    ACPI_FREE (NewAml.Pointer);
+    ACPI_FREE_SIZE (NewAml.Pointer, NewAml.Length);
 Exit2:
-    ACPI_FREE (ResourceBuffer.Pointer);
+    ACPI_FREE_SIZE (ResourceBuffer.Pointer, ResourceBuffer.Length);
 Exit1:
-    ACPI_FREE (ReturnBuffer.Pointer);
+    ACPI_FREE_SIZE (ReturnBuffer.Pointer, ReturnBuffer.Length);
     return (Status);
 }
 
@@ -1158,7 +1158,7 @@ GetCrs:
         }
 
 EndCrs:
-        ACPI_FREE (ReturnBuffer.Pointer);
+        ACPI_FREE_SIZE (ReturnBuffer.Pointer, ReturnBuffer.Length);
     }
 
 

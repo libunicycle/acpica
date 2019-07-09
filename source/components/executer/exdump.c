@@ -1179,7 +1179,7 @@ AcpiExDumpReferenceObj (
             AcpiOsPrintf ("%s: %s\n",
                 AcpiUtGetTypeName (ObjDesc->Reference.Node->Type),
                 (char *) RetBuf.Pointer);
-            ACPI_FREE (RetBuf.Pointer);
+            ACPI_FREE_SIZE (RetBuf.Pointer, RetBuf.Length);
         }
     }
     else if (ObjDesc->Reference.Object)

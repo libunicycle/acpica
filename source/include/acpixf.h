@@ -152,6 +152,10 @@
 #ifndef __ACXFACE_H__
 #define __ACXFACE_H__
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 /* Current ACPICA subsystem version in YYYYMMDD format */
 
 #define ACPI_CA_VERSION                 0x20190703
@@ -1399,5 +1403,7 @@ AcpiRunDebugger (
 void
 AcpiSetDebuggerThreadId (
     ACPI_THREAD_ID          ThreadId);
+
+#pragma GCC diagnostic pop
 
 #endif /* __ACXFACE_H__ */

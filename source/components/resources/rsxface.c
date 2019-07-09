@@ -845,7 +845,7 @@ AcpiWalkResources (
     /* Walk the resource list and cleanup */
 
     Status = AcpiWalkResourceBuffer (&Buffer, UserFunction, Context);
-    ACPI_FREE (Buffer.Pointer);
+    ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
     return_ACPI_STATUS (Status);
 }
 

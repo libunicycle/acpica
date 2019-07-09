@@ -1150,7 +1150,7 @@ Exit:
 
     if (NewBuffer)
     {
-        ACPI_FREE (NewBuffer);
+        ACPI_FREE_SIZE (NewBuffer, BufferLength);
     }
     return_ACPI_STATUS (Status);
 }

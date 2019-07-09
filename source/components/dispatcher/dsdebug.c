@@ -214,7 +214,7 @@ AcpiDsPrintNodePathname (
 
         ACPI_DEBUG_PRINT_RAW ((ACPI_DB_DISPATCH, "[%s] (Node %p)",
             (char *) Buffer.Pointer, Node));
-        ACPI_FREE (Buffer.Pointer);
+        ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
     }
 
     return_VOID;

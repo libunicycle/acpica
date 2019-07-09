@@ -621,6 +621,7 @@ AcpiNsConvertToReference (
     ACPI_NAMESPACE_NODE     *Node;
     ACPI_GENERIC_STATE      ScopeInfo;
     char                    *Name;
+    UINT32                  NameLength;
 
 
     ACPI_FUNCTION_NAME (NsConvertToReference);
@@ -628,7 +629,7 @@ AcpiNsConvertToReference (
 
     /* Convert path into internal presentation */
 
-    Status = AcpiNsInternalizeName (OriginalObject->String.Pointer, &Name);
+    Status = AcpiNsInternalizeName (OriginalObject->String.Pointer, &Name, &NameLength);
     if (ACPI_FAILURE (Status))
     {
         return_ACPI_STATUS (Status);
@@ -668,7 +669,7 @@ AcpiNsConvertToReference (
     AcpiUtAddReference (Node->Object);
 
 ErrorExit:
-    ACPI_FREE (Name);
+    ACPI_FREE_SIZE (Name, NameLength);
     *ReturnObject = NewObject;
     return (AE_OK);
 }

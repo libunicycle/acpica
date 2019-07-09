@@ -189,6 +189,7 @@ AcpiUtDeleteInternalObj (
     ACPI_OPERAND_OBJECT     *Object)
 {
     void                    *ObjPointer = NULL;
+    UINT32                  ObjSize;
     ACPI_OPERAND_OBJECT     *HandlerDesc;
     ACPI_OPERAND_OBJECT     *SecondDesc;
     ACPI_OPERAND_OBJECT     *NextDesc;
@@ -222,6 +223,7 @@ AcpiUtDeleteInternalObj (
             /* But only if it is NOT a pointer into an ACPI table */
 
             ObjPointer = Object->String.Pointer;
+            ObjSize = Object->String.Length;
         }
         break;
 
@@ -237,6 +239,7 @@ AcpiUtDeleteInternalObj (
             /* But only if it is NOT a pointer into an ACPI table */
 
             ObjPointer = Object->Buffer.Pointer;
+            ObjSize = Object->Buffer.Length;
         }
         break;
 
@@ -252,7 +255,9 @@ AcpiUtDeleteInternalObj (
 
         /* Free the (variable length) element pointer array */
 
+        // The object is allocated at AcpiDsBuildInternalPackageObj
         ObjPointer = Object->Package.Elements;
+        ObjSize = (Object->Package.Count + 1) * sizeof(void *);
         break;
 
     /*
@@ -454,7 +459,7 @@ AcpiUtDeleteInternalObj (
     {
         ACPI_DEBUG_PRINT ((ACPI_DB_ALLOCATIONS, "Deleting Object Subptr %p\n",
             ObjPointer));
-        ACPI_FREE (ObjPointer);
+        ACPI_FREE_SIZE (ObjPointer, ObjSize);
     }
 
     /* Now the object can be safely deleted */
@@ -485,21 +490,21 @@ AcpiUtDeleteInternalObjectList (
     ACPI_OPERAND_OBJECT     **ObjList)
 {
     ACPI_OPERAND_OBJECT     **InternalObj;
-
+    size_t                  Count = 0;
 
     ACPI_FUNCTION_ENTRY ();
 
 
     /* Walk the null-terminated internal list */
 
-    for (InternalObj = ObjList; *InternalObj; InternalObj++)
+    for (InternalObj = ObjList; *InternalObj; InternalObj++, Count++)
     {
         AcpiUtRemoveReference (*InternalObj);
     }
 
     /* Free the combined parameter pointer list and object array */
 
-    ACPI_FREE (ObjList);
+    ACPI_FREE_SIZE (ObjList, (Count + 1 ) * sizeof (void*));
     return;
 }
 

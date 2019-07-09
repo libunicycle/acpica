@@ -194,6 +194,7 @@ AcpiNsExecuteTable (
     ACPI_TABLE_HEADER       *Table;
     ACPI_OWNER_ID           OwnerId;
     ACPI_EVALUATE_INFO      *Info = NULL;
+    ACPI_SIZE               FullPathnameSize;
     UINT32                  AmlLength;
     UINT8                   *AmlStart;
     ACPI_OPERAND_OBJECT     *MethodObj = NULL;
@@ -254,7 +255,7 @@ AcpiNsExecuteTable (
     Info->Node = StartNode;
     Info->ObjDesc = MethodObj;
     Info->NodeFlags = Info->Node->Flags;
-    Info->FullPathname = AcpiNsGetNormalizedPathname (Info->Node, TRUE);
+    Info->FullPathname = AcpiNsGetNormalizedPathname (Info->Node, TRUE, &FullPathnameSize);
     if (!Info->FullPathname)
     {
         Status = AE_NO_MEMORY;
@@ -276,7 +277,7 @@ AcpiNsExecuteTable (
 Cleanup:
     if (Info)
     {
-        ACPI_FREE (Info->FullPathname);
+        ACPI_FREE_SIZE (Info->FullPathname, FullPathnameSize);
         Info->FullPathname = NULL;
     }
     ACPI_FREE (Info);

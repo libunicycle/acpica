@@ -325,6 +325,7 @@ AcpiUtCheckAddressRange (
     ACPI_ADDRESS_RANGE      *RangeInfo;
     ACPI_PHYSICAL_ADDRESS   EndAddress;
     char                    *Pathname;
+    ACPI_SIZE               PathnameSize;
     UINT32                  OverlapCount = 0;
 
 
@@ -362,7 +363,7 @@ AcpiUtCheckAddressRange (
             OverlapCount++;
             if (Warn)   /* Optional warning message */
             {
-                Pathname = AcpiNsGetNormalizedPathname (RangeInfo->RegionNode, TRUE);
+                Pathname = AcpiNsGetNormalizedPathname (RangeInfo->RegionNode, TRUE, &PathnameSize);
 
                 ACPI_WARNING ((AE_INFO,
                     "%s range 0x%8.8X%8.8X-0x%8.8X%8.8X conflicts with OpRegion 0x%8.8X%8.8X-0x%8.8X%8.8X (%s)",
@@ -372,7 +373,7 @@ AcpiUtCheckAddressRange (
                     ACPI_FORMAT_UINT64 (RangeInfo->StartAddress),
                     ACPI_FORMAT_UINT64 (RangeInfo->EndAddress),
                     Pathname));
-                ACPI_FREE (Pathname);
+                ACPI_FREE_SIZE (Pathname, PathnameSize);
             }
         }
 

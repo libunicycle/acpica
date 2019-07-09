@@ -201,6 +201,7 @@ AcpiEvaluateObjectTyped (
     BOOLEAN                 FreeBufferOnError = FALSE;
     ACPI_HANDLE             TargetHandle;
     char                    *FullPathname;
+    ACPI_SIZE               FullPathnameSize;
 
 
     ACPI_FUNCTION_TRACE (AcpiEvaluateObjectTyped);
@@ -230,7 +231,7 @@ AcpiEvaluateObjectTyped (
         }
     }
 
-    FullPathname = AcpiNsGetExternalPathname (TargetHandle);
+    FullPathname = AcpiNsGetExternalPathname (TargetHandle, &FullPathnameSize);
     if (!FullPathname)
     {
         return_ACPI_STATUS (AE_NO_MEMORY);
@@ -286,7 +287,7 @@ AcpiEvaluateObjectTyped (
          * (optionally enabled) allocation tracking mechanism since we
          * only want to track internal allocations.
          */
-        AcpiOsFree (ReturnBuffer->Pointer);
+        AcpiOsFreeSize (ReturnBuffer->Pointer, ReturnBuffer->Length);
         ReturnBuffer->Pointer = NULL;
     }
 
@@ -294,7 +295,7 @@ AcpiEvaluateObjectTyped (
     Status = AE_TYPE;
 
 Exit:
-    ACPI_FREE (FullPathname);
+    ACPI_FREE_SIZE (FullPathname, FullPathnameSize);
     return_ACPI_STATUS (Status);
 }
 

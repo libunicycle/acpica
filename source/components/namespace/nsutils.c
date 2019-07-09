@@ -207,7 +207,7 @@ AcpiNsPrintNodePathname (
         }
 
         AcpiOsPrintf ("%s", (char *) Buffer.Pointer);
-        ACPI_FREE (Buffer.Pointer);
+        ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
     }
 }
 
@@ -512,9 +512,11 @@ AcpiNsBuildInternalName (
 ACPI_STATUS
 AcpiNsInternalizeName (
     const char              *ExternalName,
-    char                    **ConvertedName)
+    char                    **ConvertedName,
+    UINT32                  *ConvertedNameLength)
 {
     char                    *InternalName;
+    UINT32                  InternalNameLength;
     ACPI_NAMESTRING_INFO    Info;
     ACPI_STATUS             Status;
 
@@ -536,6 +538,7 @@ AcpiNsInternalizeName (
 
     /* We need a segment to store the internal  name */
 
+    InternalNameLength = Info.Length;
     InternalName = ACPI_ALLOCATE_ZEROED (Info.Length);
     if (!InternalName)
     {
@@ -548,11 +551,12 @@ AcpiNsInternalizeName (
     Status = AcpiNsBuildInternalName (&Info);
     if (ACPI_FAILURE (Status))
     {
-        ACPI_FREE (InternalName);
+        ACPI_FREE_SIZE (InternalName, InternalNameLength);
         return_ACPI_STATUS (Status);
     }
 
     *ConvertedName = InternalName;
+    *ConvertedNameLength = InternalNameLength;
     return_ACPI_STATUS (AE_OK);
 }
 
@@ -891,6 +895,7 @@ AcpiNsGetNodeUnlocked (
     ACPI_GENERIC_STATE      ScopeInfo;
     ACPI_STATUS             Status;
     char                    *InternalPath;
+    UINT32                  InternalPathSize;
 
 
     ACPI_FUNCTION_TRACE_PTR (NsGetNodeUnlocked, ACPI_CAST_PTR (char, Pathname));
@@ -919,7 +924,7 @@ AcpiNsGetNodeUnlocked (
 
     /* Convert path to internal representation */
 
-    Status = AcpiNsInternalizeName (Pathname, &InternalPath);
+    Status = AcpiNsInternalizeName (Pathname, &InternalPath, &InternalPathSize);
     if (ACPI_FAILURE (Status))
     {
         return_ACPI_STATUS (Status);
@@ -940,7 +945,7 @@ AcpiNsGetNodeUnlocked (
             Pathname, AcpiFormatException (Status)));
     }
 
-    ACPI_FREE (InternalPath);
+    ACPI_FREE_SIZE (InternalPath, InternalPathSize);
     return_ACPI_STATUS (Status);
 }
 

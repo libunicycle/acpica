@@ -152,6 +152,10 @@
 #ifndef __ACDEBUG_H__
 #define __ACDEBUG_H__
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 /* The debugger is used in conjunction with the disassembler most of time */
 
 #ifdef ACPI_DISASSEMBLER
@@ -608,5 +612,7 @@ void
 AcpiDbUint32ToHexString (
     UINT32                  Value,
     char                    *Buffer);
+
+#pragma GCC diagnostic pop
 
 #endif  /* __ACDEBUG_H__ */

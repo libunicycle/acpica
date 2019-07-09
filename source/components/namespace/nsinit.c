@@ -851,11 +851,12 @@ AcpiNsInitOneDevice (
         {
             /* Ignore error and move on to next device */
 
-            char *ScopeName = AcpiNsGetNormalizedPathname (DeviceNode, TRUE);
+            ACPI_SIZE ScopeNameSize;
+            char *ScopeName = AcpiNsGetNormalizedPathname (DeviceNode, TRUE, &ScopeNameSize);
 
             ACPI_EXCEPTION ((AE_INFO, Status, "during %s._INI execution",
                 ScopeName));
-            ACPI_FREE (ScopeName);
+            ACPI_FREE_SIZE (ScopeName, ScopeNameSize);
         }
 #endif
     }

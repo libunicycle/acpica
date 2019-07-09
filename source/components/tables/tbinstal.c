@@ -457,7 +457,7 @@ AcpiTbUninstallTable (
     if ((TableDesc->Flags & ACPI_TABLE_ORIGIN_MASK) ==
         ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL)
     {
-        ACPI_FREE (ACPI_PHYSADDR_TO_PTR (TableDesc->Address));
+        ACPI_FREE_SIZE (ACPI_PHYSADDR_TO_PTR (TableDesc->Address), sizeof(ACPI_TABLE_HEADER));
     }
 
     TableDesc->Address = ACPI_PTR_TO_PHYSADDR (NULL);

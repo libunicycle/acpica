@@ -335,6 +335,7 @@ AcpiExStartTraceMethod (
     ACPI_WALK_STATE         *WalkState)
 {
     char                    *Pathname = NULL;
+    ACPI_SIZE               PathnameSize = 0;
     BOOLEAN                 Enabled = FALSE;
 
 
@@ -343,7 +344,7 @@ AcpiExStartTraceMethod (
 
     if (MethodNode)
     {
-        Pathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE);
+        Pathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE, &PathnameSize);
     }
 
     Enabled = AcpiExInterpreterTraceEnabled (Pathname);
@@ -374,7 +375,7 @@ AcpiExStartTraceMethod (
 
     if (Pathname)
     {
-        ACPI_FREE (Pathname);
+        ACPI_FREE_SIZE (Pathname, PathnameSize);
     }
 }
 
@@ -401,6 +402,7 @@ AcpiExStopTraceMethod (
     ACPI_WALK_STATE         *WalkState)
 {
     char                    *Pathname = NULL;
+    ACPI_SIZE               PathnameSize = 0;
     BOOLEAN                 Enabled;
 
 
@@ -409,7 +411,7 @@ AcpiExStopTraceMethod (
 
     if (MethodNode)
     {
-        Pathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE);
+        Pathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE, &PathnameSize);
     }
 
     Enabled = AcpiExInterpreterTraceEnabled (NULL);
@@ -438,7 +440,7 @@ AcpiExStopTraceMethod (
 
     if (Pathname)
     {
-        ACPI_FREE (Pathname);
+        ACPI_FREE_SIZE (Pathname, PathnameSize);
     }
 }
 

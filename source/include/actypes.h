@@ -492,6 +492,7 @@ typedef UINT64                          ACPI_PHYSICAL_ADDRESS;
 #define ACPI_ALLOCATE(a)                AcpiOsAllocate ((ACPI_SIZE) (a))
 #define ACPI_ALLOCATE_ZEROED(a)         AcpiOsAllocateZeroed ((ACPI_SIZE) (a))
 #define ACPI_FREE(a)                    AcpiOsFree (a)
+#define ACPI_FREE_SIZE(a, Size)                    AcpiOsFreeSize (a, Size)
 #define ACPI_MEM_TRACKING(a)
 
 #endif /* ACPI_DBG_TRACK_ALLOCATIONS */

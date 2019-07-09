@@ -223,6 +223,7 @@ typedef struct acpi_walk_state
     union acpi_operand_object       *MethodDesc;        /* Method descriptor if running a method */
     struct acpi_namespace_node      *MethodNode;        /* Method node if running a method */
     char                            *MethodPathname;    /* Full pathname of running method */
+    ACPI_SIZE                       MethodPathnameLength; /* Pathname size */
     ACPI_PARSE_OBJECT               *Op;                /* Current parser op */
     const ACPI_OPCODE_INFO          *OpInfo;            /* Info on current opcode */
     ACPI_PARSE_OBJECT               *Origin;            /* Start of walk [Obsolete] */

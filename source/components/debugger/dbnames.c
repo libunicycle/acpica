@@ -529,7 +529,7 @@ AcpiDbWalkAndMatchName (
 
         AcpiOsPrintf ("%32s", (char *) Buffer.Pointer);
         (void) AcpiNsDumpOneObject (ObjHandle, NestingLevel, &Info, NULL);
-        ACPI_FREE (Buffer.Pointer);
+        ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
     }
 
     return (AE_OK);
@@ -759,7 +759,7 @@ AcpiDbWalkForSpecificObjects (
     }
 
     AcpiOsPrintf ("%32s", (char *) Buffer.Pointer);
-    ACPI_FREE (Buffer.Pointer);
+    ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
 
     /* Dump short info about the object */
 
@@ -1107,7 +1107,7 @@ AcpiDbBusWalk (
     /* Display the full path */
 
     AcpiOsPrintf ("%-32s Type %X", (char *) Buffer.Pointer, Node->Type);
-    ACPI_FREE (Buffer.Pointer);
+    ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
 
     if (Info->Flags & ACPI_PCI_ROOT_BRIDGE)
     {

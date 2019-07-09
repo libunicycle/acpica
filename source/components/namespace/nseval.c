@@ -192,6 +192,7 @@ AcpiNsEvaluate (
     ACPI_EVALUATE_INFO      *Info)
 {
     ACPI_STATUS             Status;
+    ACPI_SIZE               FullPathname;
 
 
     ACPI_FUNCTION_TRACE (NsEvaluate);
@@ -246,7 +247,7 @@ AcpiNsEvaluate (
 
     /* Get the full pathname to the object, for use in warning messages */
 
-    Info->FullPathname = AcpiNsGetNormalizedPathname (Info->Node, TRUE);
+    Info->FullPathname = AcpiNsGetNormalizedPathname (Info->Node, TRUE, &FullPathname);
     if (!Info->FullPathname)
     {
         return_ACPI_STATUS (AE_NO_MEMORY);
@@ -454,7 +455,7 @@ Cleanup:
      * Namespace was unlocked by the handling AcpiNs* function, so we
      * just free the pathname and return
      */
-    ACPI_FREE (Info->FullPathname);
+    ACPI_FREE_SIZE (Info->FullPathname, FullPathname);
     Info->FullPathname = NULL;
     return_ACPI_STATUS (Status);
 }

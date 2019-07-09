@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT
+
+menu "ACPI Settings"
+
+config ACPI_DEBUG_OUTPUT
+    bool "ACPI debug output"
+    def_bool n
+    ---help---
+    This enables verbose ACPI output
+
+endmenu

@@ -290,6 +290,10 @@
 
 #endif
 
+#include "acunicycle.h"
+
+#if 0
+
 #if defined(_LINUX) || defined(__linux__)
 #include "aclinux.h"
 
@@ -348,6 +352,8 @@
 /* Unknown environment */
 
 #error Unknown target environment
+#endif
+
 #endif
 
 /*! [End] no source code translation !*/

@@ -478,7 +478,8 @@ AcpiNsOpensScope (
 
 char *
 AcpiNsGetExternalPathname (
-    ACPI_NAMESPACE_NODE     *Node);
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_SIZE               *NameBufferSize);
 
 UINT32
 AcpiNsBuildNormalizedPath (
@@ -490,7 +491,8 @@ AcpiNsBuildNormalizedPath (
 char *
 AcpiNsGetNormalizedPathname (
     ACPI_NAMESPACE_NODE     *Node,
-    BOOLEAN                 NoTrailing);
+    BOOLEAN                 NoTrailing,
+    ACPI_SIZE               *Size);
 
 char *
 AcpiNsBuildPrefixedPathname (
@@ -669,7 +671,8 @@ AcpiNsGetInternalNameLength (
 ACPI_STATUS
 AcpiNsInternalizeName (
     const char              *DottedName,
-    char                    **ConvertedName);
+    char                    **ConvertedName,
+    UINT32                  *ConvertedNameLength);
 
 ACPI_STATUS
 AcpiNsExternalizeName (

@@ -568,6 +568,6 @@ AcpiUtDisplayInitPathname (
     }
     AcpiOsPrintf ("\n");
 
-    ACPI_FREE (Buffer.Pointer);
+    ACPI_FREE_SIZE (Buffer.Pointer, Buffer.Length);
 }
 #endif

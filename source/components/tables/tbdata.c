@@ -805,7 +805,8 @@ AcpiTbResizeRootTableList (
 
         if (AcpiGbl_RootTableList.Flags & ACPI_ROOT_ORIGIN_ALLOCATED)
         {
-            ACPI_FREE (AcpiGbl_RootTableList.Tables);
+            ACPI_SIZE OldTableSize = TableCount * sizeof (ACPI_TABLE_DESC);
+            ACPI_FREE_SIZE (AcpiGbl_RootTableList.Tables, OldTableSize);
         }
     }
 

@@ -740,7 +740,7 @@ AcpiDsCallControlMethod (
         "**** Begin nested execution of [%4.4s] **** WalkState=%p\n",
         MethodNode->Name.Ascii, NextWalkState));
 
-    ThisWalkState->MethodPathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE);
+    ThisWalkState->MethodPathname = AcpiNsGetNormalizedPathname (MethodNode, TRUE, &ThisWalkState->MethodPathnameLength);
     ThisWalkState->MethodIsNested = TRUE;
 
     /* Optional object evaluation log */
